@@ -245,16 +245,16 @@ class RPGAgent(BaseAgent):
             width_visited = np.array([1 if r > self.config.beta else 0 for r in width_visited])
             
         # plot bonus map
-		if self.config.plot:
-			width = width.reshape((len(width), 1))
-			width_visited = width_visited.reshape((len(width_visited), 1))
-			#print(str(np.count_nonzero(width)) + ' of '+str(len(width))+ 'is nonzero')
-			self.bonus_print = np.copy(query_pool)
-			self.bonus_print = np.append(self.bonus_print, width, axis=1)
-			self.plot_bonus(mode='postwidth')
-			self.bonus_print = np.copy(replay_buffer)
-			self.bonus_print = np.append(self.bonus_print, width_visited, axis=1)
-			self.plot_bonus(mode='postvisited')
+        if self.config.plot:
+            width = width.reshape((len(width), 1))
+            width_visited = width_visited.reshape((len(width_visited), 1))
+            #print(str(np.count_nonzero(width)) + ' of '+str(len(width))+ 'is nonzero')
+            self.bonus_print = np.copy(query_pool)
+            self.bonus_print = np.append(self.bonus_print, width, axis=1)
+            self.plot_bonus(mode='postwidth')
+            self.bonus_print = np.copy(replay_buffer)
+            self.bonus_print = np.append(self.bonus_print, width_visited, axis=1)
+            self.plot_bonus(mode='postvisited')
     
     def get_critic_width(self, mode, in_obs): 
         
