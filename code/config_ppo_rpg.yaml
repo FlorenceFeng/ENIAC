@@ -1,0 +1,66 @@
+description: Diabolical Combolock Baselines
+
+target:
+  vc: msrlabs
+  cluster: rr2
+
+environment:
+  image: microsoft_pytorch:v1.2.0_gpu_cuda9.0_py36_release_gpuenv_hvd0.16.2
+  registry: phillyregistry.azurecr.io
+
+code:
+  local_dir: $CONFIG_DIR
+
+
+search:
+  job_template:
+    name: search_{experiment_name:s}
+    sku: G1
+    command:
+    - cd homer_envs/
+    - python -m pip install -e . --user
+    - cd ../DeepRL/
+    - source setup.sh
+    - python -i run.py -alg {alg} -bonus_coeff {bonus_coeff} -horizon {horizon} -env diabcombolockhallway -lr {lr} -seed {seed} -bonus {bonus} -init_new_policy {init_new_policy} -n_policy_loops {n_policy_loops} -n_traj_per_loop {n_traj_per_loop} -system philly -norm_rew_b {norm_rew_b} -norm_rew {norm_rew} -eps {eps} -proll {proll}
+  type: grid
+  max_trials: 1000
+  params:
+    - name: seed
+      spec: discrete
+      values: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15]  
+    - name: horizon
+      spec: discrete
+      values: [3, 6, 11, 16]
+    - name: lr
+      spec: discrete
+      values: [0.0005]
+    - name: bonus_coeff
+      spec: discrete
+      values: [1.0]
+    - name: bonus
+      spec: discrete
+      values: [id-kernel-s]
+    - name: alg
+      spec: discrete
+      values: [ppo-rpg]
+    - name: init_new_policy
+      spec: discrete
+      values: [0]
+    - name: n_policy_loops
+      spec: discrete
+      values: [30]
+    - name: n_traj_per_loop
+      spec: discrete
+      values: [50]
+    - name: norm_rew_b
+      spec: discrete
+      values: [0]
+    - name: norm_rew
+      spec: discrete
+      values: [0]
+    - name: eps
+      spec: discrete
+      values: [0.01, 0.05]
+    - name: proll
+      spec: discrete
+      values: [1.0]                              

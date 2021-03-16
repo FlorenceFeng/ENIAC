@@ -1,0 +1,54 @@
+description: Diabolical Combolock Baselines
+
+target:
+  vc: msrlabs
+  cluster: rr2
+
+environment:
+  image: microsoft_pytorch:v1.2.0_gpu_cuda9.0_py36_release_gpuenv_hvd0.16.2
+  registry: phillyregistry.azurecr.io
+
+code:
+  local_dir: $CONFIG_DIR
+
+
+search:
+  job_template:
+    name: search_{experiment_name:s}_{lr:.5f}
+    sku: G1
+    command:
+    - cd homer_envs/
+    - python -m pip install -e . --user
+    - cd ../DeepRL/
+    - source setup.sh
+    - python run.py -alg {alg} -lr {lr} -env diabcombolockhallway -horizon {horizon} -system philly -bonus_coeff {bonus_coeff} -norm_rew {norm_rew} -seed {seed} -noise bernoulli -rnd_l2 {rnd_l2} -rnd_bneck {rnd_bneck} -eps {eps}
+  type: grid
+  max_trials: 1000
+  params:
+    - name: seed
+      spec: discrete
+      values: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15]  
+    - name: horizon
+      spec: discrete
+      values: [3, 6, 11, 16]
+    - name: lr
+      spec: discrete
+      values: [0.001, 0.0005]
+    - name: bonus_coeff
+      spec: discrete
+      values: [1e2, 1e3, 1e4]
+    - name: alg
+      spec: discrete
+      values: [ppo-rnd]
+    - name: norm_rew
+      spec: discrete
+      values: [0]
+    - name: rnd_l2
+      spec: discrete
+      values: [0.0]
+    - name: rnd_bneck
+      spec: discrete
+      values: [1]
+    - name: eps
+      spec: discrete
+      values: [0.0]
