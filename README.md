@@ -4,6 +4,9 @@
 
 *Fei Feng, Wotao Yin, Alekh Agarwal, and Lin F. Yang*
 
+The code follows the PPO implementation by Shangtong Zhang at https://github.com/ShangtongZhang/DeepRL and the policy cover implementation in **PC-PG: Policy Cover Directed Exploration for Provable Policy Gradient Learning**.
+
+**Core files:**
 - Find main function and hyperparameters at: code/DeepRL/run.py
 
 - Change network structure at: code/DeepRL/deep_rl/network/network_bodies.py
